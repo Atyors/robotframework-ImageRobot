@@ -14,5 +14,3 @@ from ImageSearchLibrary.core import search_image_in_area
 from ImageSearchLibrary.core import click_image
 from ImageSearchLibrary.core import search_image
 from ImageSearchLibrary.core import search_image_loop
-
-from ImageSearchLibrary.WindowFocus import WindowFocus.sayHello
