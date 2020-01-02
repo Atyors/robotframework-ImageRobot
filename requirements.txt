@@ -1,5 +1,4 @@
+keyboard
 opencv-python
 numpy
-python3_xlib
 pyautogui
-win32gui
