@@ -1,4 +1,4 @@
-import pyautogui
+import keyboard
 
 class Keyboard(object):
     '''
@@ -18,13 +18,25 @@ class Keyboard(object):
                 The duration between two characters. Value is in second. Default is << 0 >>.
         '''
 
-        pyautogui.typewrite(text, interval)
+        keyboard.write(text)
+
+
+    def press_key(self, key):
+        ''' Simulate the pressure and release of a key.
+
+            Parameters
+            ----------
+            key : str
+                The key code to press and release.
+        '''
+
+        keyboard.press(key)
+        keyboard.release(key)
+
 
 
     def maintain_key_pressed(self, key):
         ''' Simulate the pressure of a key until the function << release_key >> is called.
-
-            The key list can be found at this link : https://pyautogui.readthedocs.io/en/latest/keyboard.html#keyboard-keys
 
             Parameters
             ----------
@@ -32,30 +44,31 @@ class Keyboard(object):
                 The key code to maintain pressed.
         '''
 
-        pyautogui.keyDown(key)
+        keyboard.press(key)
 
     
     def release_key(self, key):
         ''' Simulate the release of a key after the function << maintain_key_pressed >> has been called.
 
-            The key list can be found at this link : https://pyautogui.readthedocs.io/en/latest/keyboard.html#keyboard-keys
-
             Parameters
             ----------
             key : str
-                The key to release.
+                The key code to release.
         '''
 
-        pyautogui.keyUp(key)
+        keyboard.release(key)
 
     
-    def execute_hotkey(self, *keys):
+    def execute_hotkey(self, hotkey):
         ''' Simulate the pressure of multiple keys in order to do a hotkey.
+
+            Example: giving << shift+a >> as << hotkey >> variable would write a << A >> capitalized.
+            Example: giving << ctrl+shift+esc >> as << hotkey >> variable would open the task manager.
 
             Parameters
             ----------
-            *keys : str(s)
-                One or multiple str representing a hotkey. Example: << ctrl, shit, esc >> will do the Control-Shift-Escape hotkey.
+            hotkey : str
+                A string representing a hotkey. Example: << ctrl+shit+esc >> will do the Control-Shift-Escape hotkey.
         '''
         
-        pyautogui.hotkey(*keys)
+        keyboard.press_and_release(hotkey)
