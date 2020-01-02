@@ -49,16 +49,19 @@ class Image(object):
             template = cv2.imread(image, 0)
             template.shape[::-1]
         except Exception:
-            raise Exception("Image \"" + str(image) + "\" not found.")
+            raise Exception("Wrong path to image \"" + str(image) + "\". Please ensure your path.")
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
 
+        if max_val < precision:
+            return [-1, -1]
+
         return max_loc
 
 
-    def search_image_until(self, image, precision=0.8, timeout=10, timesample=0.1):
-        ''' Search for the given image in the screen for a given duration.
+    def wait_until_image_appear(self, image, precision=0.8, timeout=10, timesample=0.1):
+        ''' Wait until the given image appears in the screen for a given duration.
 
             If the image is not found, when the timeout is elapsed, an error is thrown.
 
@@ -89,6 +92,40 @@ class Image(object):
             if time.clock() - start_time > timeout:
                 raise Exception("Image \"" + str(image) + "\" not found after " + str(timeout) + " seconds.")
         return pos
+
+
+    def wait_until_image_disappear(self, image, precision=0.8, timeout=10, timesample=0.1):
+            ''' Wait until the given image disappears from the screen for a given duration.
+
+                If the image is still found, when the timeout is elapsed, an error is thrown.
+
+                Parameters
+                ----------
+                image : str
+                    The path to the image we are waiting to disappear.
+                precision : double, optionnal
+                    The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
+                timeout : int, optionnal
+                    The duration elapsed before raising an error. Value is in second. Default is << 10 >> seconds.
+                timesample: double, optionnal
+                    The duration elapsed between two checks of the image. Value is in second. Default is << 0.1 >> second.
+
+                Raises
+                ------
+                Exception
+                    If the image has been found after the duration set in the timeout parameter is elapsed.
+            '''
+
+            pos = self.search_image(image, precision)
+            start_time = time.clock()
+
+            while pos[0] != -1:
+                time.sleep(timesample)
+                pos = self.search_image(image, precision)
+
+                if time.clock() - start_time > timeout:
+                    raise Exception("Image \"" + str(image) + "\" still found after " + str(timeout) + " seconds.")
+            return pos
 
 
     def search_image_multiple(self, image, precision=0.8, debug=False):
@@ -185,7 +222,7 @@ class Image(object):
         return count
 
 
-    def highlight_image(self, image, precision=0.8, color=(0, 0, 255), name=None, debug=False):
+    def highlight_image(self, image, precision=0.8, color=(0, 0, 255), width=2, name=None, debug=False):
         ''' Highlight the searched image in the current screen.
 
             Take a screenshot as << tmp.png >> then read it with cv2 to keep the good colors.
@@ -198,6 +235,8 @@ class Image(object):
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
             color : bgr, optionnal
                 The color in BGR-format meaning colors are given as following : blue, green and red. Default is << (0, 0, 255) >> which is red color.
+            width : int, optionnal
+                The width of the square borders. Value is in pixel. Default is << 2 >> pixel.
             name : str, optionnal
                 The name of the picture if given. Otherwise the name will be such as << imagerobot-screenshot-XXX.png >>. Default is << None >>.
             debug : bool, optionnal
@@ -213,6 +252,10 @@ class Image(object):
             Output
             ------
             A screenshot named << imagerobot-screenshot-XXX.png >> (or with the given name) is created with squares arround the image searched.
+
+            Return
+            ------
+            The coordinates of the top-left and bottom-right corners of the rectangle drawn.
         '''
 
         current_screen = pyautogui.screenshot()
@@ -265,9 +308,57 @@ class Image(object):
         loc = np.where(res >= precision)
 
         for pt in zip(*loc[::-1]):
-            cv2.rectangle(output_image, pt, (pt[0] + w, pt[1] + h), color, 1)
+            cv2.rectangle(output_image, pt, (pt[0] + w, pt[1] + h), color, width)
 
         cv2.imwrite(output_name, output_image)
+
+        return (pt, (pt[0] + w, pt[1] + h))
+
+
+    def search_image_in_image(self, specific_image, image_region):
+        ''' WIP
+        '''
+        img = cv2.imread(image_region)
+        height, width, channels = img.shape
+        image_region_pos = self.search_image(image_region)
+        pos = self.search_image_in_region(specific_image, image_region_pos[0], image_region_pos[1], image_region_pos[0] + width, image_region_pos[1] + height)
+
+        return (pos[0] + image_region_pos[0], pos[1] + image_region_pos[1])
+        # img = cv2.imread(image_region)
+        # height, width, channels = img.shape
+        # image_region_pos = self.wait_until_image_appear(image_region, region_precision, region_timeout)
+
+        # start_time = time.clock()
+
+        # pos = [-1, -1]
+
+        # while pos[0] == -1:
+        #     time.sleep(timesample)
+        #     pos = self.search_image_in_region(specific_image, image_region_pos[0], image_region_pos[1], image_region_pos[0] + width, image_region_pos[1] + height)
+
+        #     if time.clock() - start_time > specific_timeout:
+        #         raise Exception("Image \"" + str(image) + "\" still found after " + str(timeout) + " seconds.")
+
+        # return (pos[0] + image_region_pos[0], pos[1] + image_region_pos[1])
+
+
+    def search_image_in_region(image, x1, y1, x2, y2, precision=0.8):
+        ''' WIP 
+        '''
+        region = pyautogui.screenshot(region=(x1, y1, x2, y2))
+
+        img_rgb = np.array(region)
+        img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+        template = cv2.imread(image, 0)
+        template.shape[::-1]
+
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+
+        if max_val < precision:
+            return [-1, -1]
+
+        return max_loc
 
 
     def set_screenshot_prefix(self, prefix):
