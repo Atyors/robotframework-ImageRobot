@@ -15,10 +15,8 @@ setup(
     classifiers             = [
                                 "Programming Language :: Python",
                                 "Development Status :: 1 - Planning",
-                                "License :: OSI Approved",
                                 "Natural Language :: English",
                                 "Operating System :: OS Independent",
-                                "Programming Language :: Python :: 2.7",
-                                "Topic :: Communications",
+                                "Programming Language :: Python :: 3.7",
                             ],
 )
