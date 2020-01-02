@@ -3,10 +3,10 @@ ImageSearchLibrary is a library dedicated to GUI management.
 
 The purpose of this module is to bring to Robot Framework user a way to do image recognition.
 This module has been created in 4 different parts.
-    - Image recognition
-    - Window focus
-    - Mouse control
-    - Keyboard input
+- Image recognition
+- Window focus
+- Mouse control
+- Keyboard input
 
 It can be installed using pip:
     python -m pip install ImageRobot
