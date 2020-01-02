@@ -14,7 +14,6 @@ It can be installed using pip:
 With this module you will be able to do the basics of image recognition using RF.
 
 
-========================================================
 Image recognition
 ========================================================
 
@@ -35,16 +34,13 @@ If the image has not been found in the next 30 seconds, the Robot will show a fa
 that it did not happen.
 
 
-========================================================
 Window focus
 ========================================================
 
 
-========================================================
 Mouse control
 ========================================================
 
 
-========================================================
 Keyboard input
 ========================================================
