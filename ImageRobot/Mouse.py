@@ -60,7 +60,7 @@ class Mouse(object):
                 The exception is raised by the function << search_image_until >>.
         '''
 
-        pos = Image().search_image_until(image, precision)
+        pos = Image().wait_until_image_appear(image, precision)
         img = cv2.imread(image)
         height, width, channels = img.shape
         pyautogui.moveTo(pos[0] + width / 2, pos[1] + height / 2, timestamp)
