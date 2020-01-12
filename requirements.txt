@@ -2,3 +2,4 @@ keyboard
 opencv-python
 numpy
 pyautogui
+pygetwindow
