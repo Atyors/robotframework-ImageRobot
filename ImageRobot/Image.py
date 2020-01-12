@@ -6,8 +6,7 @@ import pyautogui
 
 
 class Image(object):
-    '''
-        This class has been made to implement image recognition on the main screen.
+    ''' This class has been made to implement image recognition on the main screen.
     '''
 
 
