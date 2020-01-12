@@ -1,8 +1,7 @@
 import keyboard
 
 class Keyboard(object):
-    '''
-        This class has been made to implement keyboard control while image recognition.
+    ''' This class has been made to implement keyboard control while image recognition.
     '''
 
     def input_text(self, text, interval=0):
