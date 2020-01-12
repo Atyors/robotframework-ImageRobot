@@ -26,9 +26,9 @@ class Image(object):
             ----------
             image : str
                 The path to the image we are looking for.
-            precision : double, optionnal
+            precision : double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            debug : bool, optionnal
+            debug : bool, optional
                 The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
             Raises
@@ -69,11 +69,11 @@ class Image(object):
             ----------
             image : str
                 The path to the image we are looking for.
-            precision : double, optionnal
+            precision : double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            timeout : int, optionnal
+            timeout : int, optional
                 The duration elapsed before raising an error. Value is in second. Default is << 10 >> seconds.
-            timesample: double, optionnal
+            timesample: double, optional
                 The duration elapsed between two checks of the image. Value is in second. Default is << 0.1 >> second.
 
             Raises
@@ -103,11 +103,11 @@ class Image(object):
                 ----------
                 image : str
                     The path to the image we are waiting to disappear.
-                precision : double, optionnal
+                precision : double, optional
                     The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-                timeout : int, optionnal
+                timeout : int, optional
                     The duration elapsed before raising an error. Value is in second. Default is << 10 >> seconds.
-                timesample: double, optionnal
+                timesample: double, optional
                     The duration elapsed between two checks of the image. Value is in second. Default is << 0.1 >> second.
 
                 Raises
@@ -135,9 +135,9 @@ class Image(object):
             ----------
             image : str
                 The path to the image we are looking for.
-            precision : double, optionnal
+            precision : double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            debug : bool, optionnal
+            debug : bool, optional
                 The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
             Raises
@@ -182,9 +182,9 @@ class Image(object):
             ----------
             image : str
                 The path to the image we are looking for.
-            precision : double, optionnal
+            precision : double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            debug : bool, optionnal
+            debug : bool, optional
                 The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
             Raises
@@ -231,15 +231,15 @@ class Image(object):
             ----------
             image : str
                 The path to the image we are looking for.
-            precision : double, optionnal
+            precision : double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            color : bgr, optionnal
+            color : bgr, optional
                 The color in BGR-format meaning colors are given as following : blue, green and red. Default is << (0, 0, 255) >> which is red color.
-            width : int, optionnal
+            width : int, optional
                 The width of the square borders. Value is in pixel. Default is << 2 >> pixel.
-            name : str, optionnal
+            name : str, optional
                 The name of the picture if given. Otherwise the name will be such as << imagerobot-screenshot-XXX.png >>. Default is << None >>.
-            debug : bool, optionnal
+            debug : bool, optional
                 The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
             Raises
