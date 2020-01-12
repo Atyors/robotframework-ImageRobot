@@ -6,8 +6,7 @@ import random
 
 
 class Mouse(object):
-    '''
-        This class has been made to implement mouse control while image recognition.
+    ''' This class has been made to implement mouse control while image recognition.
     '''
 
     def click_position(self, x, y, action="left", timestamp=0, offset=0):
