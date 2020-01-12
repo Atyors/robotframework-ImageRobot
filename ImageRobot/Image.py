@@ -310,6 +310,11 @@ class Image(object):
         for pt in zip(*loc[::-1]):
             cv2.rectangle(output_image, pt, (pt[0] + w, pt[1] + h), color, width)
 
+        try:
+            type(pt)
+        except UnboundLocalError:
+            raise Exception("Image \"" + str(image) + "\" not found.")
+
         cv2.imwrite(output_name, output_image)
 
         return (pt, (pt[0] + w, pt[1] + h))
