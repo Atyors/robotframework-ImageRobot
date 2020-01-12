@@ -121,7 +121,6 @@ class Mouse(object):
             Exception
                 If the image has not been found after the duration set in the timeout parameter is elapsed.
                 The exception is raised by the function << wait_until_image_appear >>.
-            Exception
                 If the offset is too high and may cause the cursor to be out of the image.
         '''
 
