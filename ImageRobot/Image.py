@@ -224,7 +224,7 @@ class Image(object):
     def highlight_image(self, image, precision=0.8, color=(0, 0, 255), width=2, name=None, debug=False):
         ''' Highlight the searched image in the current screen.
 
-            Take a screenshot as << tmp.png >> then read it with cv2 to keep the good colors.
+            Take a screenshot as << debug_screen.png >> then read it with cv2 to keep the good colors.
 
             Parameters
             ----------
@@ -270,7 +270,7 @@ class Image(object):
         output_name = self.screenshot_name
         output_number = "000"
 
-        if os.path.isfile(output_name + "-001.png") and name == None:
+        if os.path.isfile(output_name + "-001.png") and name is None:
             for i in range(1, 1001):
                 if i < 10:
                     output_number = "00" + str(i)
@@ -288,7 +288,7 @@ class Image(object):
         else:
             output_name = self.screenshot_name + "-001.png"
 
-        if name != None:
+        if name is not None:
             if str(name[-4:]).lower() == ".png" or str(name[-4:]).lower() == ".jpg":
                 output_name = str(name)
             else:
