@@ -1,3 +1,5 @@
+from ImageRobot.RobotException import RobotException
+
 import os.path
 import time
 import cv2
@@ -13,6 +15,7 @@ class Image(object):
     def __init__(self):
         ''' Set the initial values once the class is called.
         '''
+
         self.screenshot_name = "imagerobot-screenshot"
 
 
@@ -34,6 +37,11 @@ class Image(object):
             ------
             Exception
                 If the image has not been found.
+
+            Return
+            ------
+            max_loc : tuple
+                The location of the image. The top-left corner of the found image.
         '''
 
         current_screen = pyautogui.screenshot()
@@ -44,11 +52,7 @@ class Image(object):
         img_rgb = np.array(current_screen)
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 
-        try:
-            template = cv2.imread(image, 0)
-            template.shape[::-1]
-        except Exception:
-            raise Exception("Wrong path to image \"" + str(image) + "\". Please ensure your path.")
+        template, w, h = self.__set_image_up(image)
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
@@ -79,6 +83,11 @@ class Image(object):
             ------
             Exception
                 If the image has not been found after the duration set in the timeout parameter is elapsed.
+
+            Return
+            ------
+            pos : tuple
+                The location of the image. The top-left corner of the found image.
         '''
 
         pos = self.search_image(image, precision)
@@ -89,7 +98,7 @@ class Image(object):
             pos = self.search_image(image, precision)
 
             if time.clock() - start_time > timeout:
-                raise Exception("Image \"" + str(image) + "\" not found after " + str(timeout) + " seconds.")
+                RobotException().image_not_found_after_duration_exception(image, timeout)
         return pos
 
 
@@ -113,6 +122,11 @@ class Image(object):
                 ------
                 Exception
                     If the image has been found after the duration set in the timeout parameter is elapsed.
+
+                Return
+                ------
+                pos : tuple
+                    The location of the image. The top-left corner of the found image.
             '''
 
             pos = self.search_image(image, precision)
@@ -123,7 +137,7 @@ class Image(object):
                 pos = self.search_image(image, precision)
 
                 if time.clock() - start_time > timeout:
-                    raise Exception("Image \"" + str(image) + "\" still found after " + str(timeout) + " seconds.")
+                    RobotException().image_still_found_after_duration_exception(image, timeout)
             return pos
 
 
@@ -158,11 +172,7 @@ class Image(object):
         img_rgb = np.array(current_screen)
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 
-        try:
-            template = cv2.imread(image, 0)
-            w, h = template.shape[::-1]
-        except Exception:
-            raise Exception("Image \"" + str(image) + "\" not found.")
+        template, w, h = self.__set_image_up(image)
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= precision)
@@ -188,7 +198,7 @@ class Image(object):
 
             Raises
             ------
-            Exception
+            RobotException
                 If the image has not been found.
 
             Return
@@ -205,11 +215,7 @@ class Image(object):
         img_rgb = np.array(current_screen)
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 
-        try:
-            template = cv2.imread(image, 0)
-            w, h = template.shape[::-1]
-        except Exception:
-            raise Exception("Image \"" + str(image) + "\" not found.")
+        template, w, h = self.__set_image_up(image)
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= precision)
@@ -224,7 +230,9 @@ class Image(object):
     def highlight_image(self, image, precision=0.8, color=(0, 0, 255), width=2, name=None, debug=False):
         ''' Highlight the searched image in the current screen.
 
-            Take a screenshot as << tmp.png >> then read it with cv2 to keep the good colors.
+            If the image is found multiple times, it will draw a rectangle arround each.
+
+            Take a screenshot as << debug_screen.png >> then read it with cv2 to keep the good colors.
 
             Parameters
             ----------
@@ -243,7 +251,7 @@ class Image(object):
 
             Raises
             ------
-            Exception
+            RobotException
                 Throw an error if the user launching the function cannot write on disk.
                 Throw an error if the user already has 999 sreenshots in the repository.
                 Throw an error if the user set a name in a wrong format without finishing by << .png >> nor << .jpg >>.
@@ -251,57 +259,18 @@ class Image(object):
             Output
             ------
             A screenshot named << imagerobot-screenshot-XXX.png >> (or with the given name) is created with squares arround the image searched.
-
-            Return
-            ------
-            The coordinates of the top-left and bottom-right corners of the rectangle drawn.
         '''
 
         current_screen = pyautogui.screenshot()
 
-        try:
-            current_screen.save("debug_screen.png")
-            output_image = cv2.imread("debug_screen.png")
-            if not debug:
-                os.remove("debug_screen.png")
-        except Exception:
-            raise Exception("Cannot write on disk for image manipulation.")
+        output_image = self.__prepare_output_image(current_screen, debug)
 
-        output_name = self.screenshot_name
-        output_number = "000"
-
-        if os.path.isfile(output_name + "-001.png") and name == None:
-            for i in range(1, 1001):
-                if i < 10:
-                    output_number = "00" + str(i)
-                elif i < 100:
-                    output_number = "0" + str(i)
-                else:
-                    output_number = str(i)
-
-                if i == 1000:
-                    raise Exception("Consider cleaning your repository. It seems you already have 999 screenshots.")
-
-                if not os.path.isfile(output_name + "-" + output_number + ".png"):
-                    output_name = output_name + "-" + output_number + ".png"
-                    break
-        else:
-            output_name = self.screenshot_name + "-001.png"
-
-        if name != None:
-            if str(name[-4:]).lower() == ".png" or str(name[-4:]).lower() == ".jpg":
-                output_name = str(name)
-            else:
-                raise Exception("Image format is wrong. Should be either \".png\" or \".jpg\".")
+        output_name = self.__check_output_name(name)
 
         img_rgb = np.array(current_screen)
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 
-        try:
-            template = cv2.imread(image, 0)
-            w, h = template.shape[::-1]
-        except Exception:
-            raise Exception("Image \"" + str(image) + "\" not found.")
+        template, w, h = self.__set_image_up(image)
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
         loc = np.where(res >= precision)
@@ -312,11 +281,9 @@ class Image(object):
         try:
             type(pt)
         except UnboundLocalError:
-            raise Exception("Image \"" + str(image) + "\" not found.")
+            RobotException().image_not_found_exception(image)
 
         cv2.imwrite(output_name, output_image)
-
-        return (pt, (pt[0] + w, pt[1] + h))
 
 
     def search_image_in_image(self, specific_image, image_region):
@@ -346,23 +313,115 @@ class Image(object):
         # return (pos[0] + image_region_pos[0], pos[1] + image_region_pos[1])
 
 
-    def search_image_in_region(image, x1, y1, x2, y2, precision=0.8):
-        ''' WIP 
-        '''
-        region = pyautogui.screenshot(region=(x1, y1, x2, y2))
+    def search_image_in_area(self, image, x1, y1, x2, y2, precision=0.8, debug=False):
+            ''' Search for the image on the screen.
 
-        img_rgb = np.array(region)
+                If the image is not found throws an exception.
+
+                Parameters
+                ----------
+                image : str
+                    The path to the image we are looking for.
+                precision : double, optional
+                    The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
+                debug : bool, optional
+                    The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
+
+                Raises
+                ------
+                Exception
+                    If the image has not been found.
+
+                Return
+                ------
+                max_loc : tuple
+                    The location of the image. The top-left corner of the found image.
+            '''
+
+            current_screen = pyautogui.screenshot(region=(x1, y1, x2, y2))
+
+            if debug:
+                current_screen.save('debug_screen.png')
+
+            img_rgb = np.array(current_screen)
+            img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+
+            template, w, h = self.__set_image_up(image)
+
+            res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+            min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+
+            if max_val < precision:
+                return [-1, -1]
+
+            return max_loc
+
+
+    def highlight_image_in_area(self, image, x1, y1, x2, y2, precision=0.8, color=(0, 0, 255), width=2, name=None, debug=False):
+        ''' Highlight the searched image in the given area of the screen.
+
+            If the image is found multiple times, it will draw a rectangle arround each.
+
+            Take a screenshot as << debug_screen.png >> then read it with cv2 to keep the good colors.
+
+            Parameters
+            ----------
+            image : str
+                The path to the image we are looking for.
+            x1 : double
+                The x coordinate of the top-left corner of the screenshot to take. 
+            y1 : double
+                The y coordinate of the top-left corner of the screenshot to take. 
+            x2 : double
+                The width of the screenshot to take.
+            y2 : double
+                The height of the screenshot to take.
+            precision : double, optional
+                The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
+            color : bgr, optional
+                The color in BGR-format meaning colors are given as following : blue, green and red. Default is << (0, 0, 255) >> which is red color.
+            width : int, optional
+                The width of the square borders. Value is in pixel. Default is << 2 >> pixel.
+            name : str, optional
+                The name of the picture if given. Otherwise the name will be such as << imagerobot-screenshot-XXX.png >>. Default is << None >>.
+            debug : bool, optional
+                The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
+
+            Raises
+            ------
+            RobotException
+                Throw an error if the user launching the function cannot write on disk.
+                Throw an error if the user already has 999 sreenshots in the repository.
+                Throw an error if the user set a name in a wrong format without finishing by << .png >> nor << .jpg >>.
+
+            Output
+            ------
+            A screenshot named << imagerobot-screenshot-XXX.png >> (or with the given name) is created with squares arround the image searched.
+        '''
+
+        current_screen = pyautogui.screenshot(region=(x1, y1, x2, y2))
+
+        output_image = self.__prepare_output_image(current_screen, debug)
+
+        output_name = self.__check_output_name(name)
+
+        img_rgb = np.array(current_screen)
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-        template = cv2.imread(image, 0)
-        template.shape[::-1]
+
+        template, w, h = self.__set_image_up(image)
 
         res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+        loc = np.where(res >= precision)
 
-        if max_val < precision:
-            return [-1, -1]
+        for pt in zip(*loc[::-1]):
+            cv2.rectangle(output_image, pt, (pt[0] + w, pt[1] + h), color, width)
 
-        return max_loc
+        try:
+            type(pt)
+        except UnboundLocalError:
+            RobotException().image_not_found_exception(image)
+
+        cv2.imwrite(output_name, output_image)
 
 
     def set_screenshot_prefix(self, prefix):
@@ -375,3 +434,123 @@ class Image(object):
         '''
 
         self.screenshot_name = prefix
+
+
+    # ==================================================================================================================
+    # Private functions
+    # ==================================================================================================================
+    
+    def __set_image_up(self, image):
+        ''' Set up the image in the template.
+
+            It checks if the path to the image is correct.
+
+            Parameters
+            ----------
+            image : str
+                The path to the image we are looking for.
+
+            Raises
+            ------
+            RobotException
+                If the image has not been found.
+
+            Return
+            ------
+            template : ndarray
+                The template of the image.
+            w : int
+                The width of the image.
+            h : height
+                The height of the image.
+        '''
+
+        try:
+            template = cv2.imread(image, 0)
+            w, h = template.shape[::-1]
+        except Exception:
+            RobotException().wrong_path_to_image_exception(image)
+
+        return template, w, h
+
+
+    def __prepare_output_image(self, current_screen, debug):
+        ''' Save and keep the output image in memory in order to keep the good colors on the screenshot.
+
+            Parameters
+            ----------
+            current_screen : PIL.Image.Image
+                The taken picture on which the search will be made.
+            debug : bool
+                The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
+
+            Raises
+            ------
+            RobotException
+                Throw an error if the user launching the function cannot write on disk.
+
+            Return
+            ------
+            output_image : ndarray
+                The image as a numpy array.
+        '''
+        try:
+            current_screen.save("debug_screen.png")
+            output_image = cv2.imread("debug_screen.png")
+            if not debug:
+                os.remove("debug_screen.png")
+        except Exception:
+            RobotException().cannot_write_on_disk_exception()
+
+        return output_image
+
+
+    def __check_output_name(self, name):
+        ''' Verify that the name is free or if the number of screenshots does not exceed 999.
+
+            Parameters
+            ----------
+            name : str
+                The name of the picture if given. Otherwise the name will be such as << imagerobot-screenshot-XXX.png >>.
+
+            Raises
+            ------
+            RobotException
+                Throw an error if the user launching the function cannot write on disk.
+                Throw an error if the user already has 999 sreenshots in the repository.
+                Throw an error if the user set a name in a wrong format without finishing by << .png >> nor << .jpg >>.
+
+            Return
+            ------
+            output_name : str
+                The future name of the screenshot if the image is found.
+        '''
+
+        output_name = self.screenshot_name
+        output_number = "000"
+
+        if os.path.isfile(output_name + "-001.png") and name is None:
+            for i in range(1, 1001):
+                if i < 10:
+                    output_number = "00" + str(i)
+                elif i < 100:
+                    output_number = "0" + str(i)
+                else:
+                    output_number = str(i)
+
+                if i == 1000:
+                    RobotException().too_many_screenshots_exception()
+
+                if not os.path.isfile(output_name + "-" + output_number + ".png"):
+                    output_name = output_name + "-" + output_number + ".png"
+                    break
+        else:
+            output_name = self.screenshot_name + "-001.png"
+
+        if name is not None:
+            if str(name[-4:]).lower() == ".png" or str(name[-4:]).lower() == ".jpg":
+                output_name = str(name)
+            else:
+                RobotException().image_format_exception()
+
+        return output_name
