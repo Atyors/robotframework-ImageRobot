@@ -1,22 +1,18 @@
 from ImageRobot.RobotException import RobotException
 
-import os.path
+import os
 import time
 import cv2
 import numpy as np
 import pyautogui
 
+ORIGINAL_SCREENSHOT_PREFIX = "imagerobot-screenshot"
 
 class Image(object):
     ''' This class has been made to implement image recognition on the main screen.
     '''
 
-
-    def __init__(self):
-        ''' Set the initial values once the class is called.
-        '''
-
-        self.screenshot_name = "imagerobot-screenshot"
+    screenshot_name = ORIGINAL_SCREENSHOT_PREFIX
 
 
     def search_image(self, image, precision=0.8, debug=False):
@@ -35,7 +31,7 @@ class Image(object):
 
             Raises
             ------
-            Exception
+            RobotException
                 If the image has not been found.
 
             Return
@@ -81,7 +77,7 @@ class Image(object):
 
             Raises
             ------
-            Exception
+            RobotException
                 If the image has not been found after the duration set in the timeout parameter is elapsed.
 
             Return
@@ -103,42 +99,42 @@ class Image(object):
 
 
     def wait_until_image_disappear(self, image, precision=0.8, timeout=10, timesample=0.1):
-            ''' Wait until the given image disappears from the screen for a given duration.
+        ''' Wait until the given image disappears from the screen for a given duration.
 
-                If the image is still found, when the timeout is elapsed, an error is thrown.
+            If the image is still found, when the timeout is elapsed, an error is thrown.
 
-                Parameters
-                ----------
-                image : str
-                    The path to the image we are waiting to disappear.
-                precision : double, optional
-                    The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-                timeout : int, optional
-                    The duration elapsed before raising an error. Value is in second. Default is << 10 >> seconds.
-                timesample: double, optional
-                    The duration elapsed between two checks of the image. Value is in second. Default is << 0.1 >> second.
+            Parameters
+            ----------
+            image : str
+                The path to the image we are waiting to disappear.
+            precision : double, optional
+                The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
+            timeout : int, optional
+                The duration elapsed before raising an error. Value is in second. Default is << 10 >> seconds.
+            timesample: double, optional
+                The duration elapsed between two checks of the image. Value is in second. Default is << 0.1 >> second.
 
-                Raises
-                ------
-                Exception
-                    If the image has been found after the duration set in the timeout parameter is elapsed.
+            Raises
+            ------
+            RobotException
+                If the image has been found after the duration set in the timeout parameter is elapsed.
 
-                Return
-                ------
-                pos : tuple
-                    The location of the image. The top-left corner of the found image.
-            '''
+            Return
+            ------
+            pos : tuple
+                The location of the image. The top-left corner of the found image.
+        '''
 
+        pos = self.search_image(image, precision)
+        start_time = time.clock()
+
+        while pos[0] != -1:
+            time.sleep(timesample)
             pos = self.search_image(image, precision)
-            start_time = time.clock()
 
-            while pos[0] != -1:
-                time.sleep(timesample)
-                pos = self.search_image(image, precision)
-
-                if time.clock() - start_time > timeout:
-                    RobotException().image_still_found_after_duration_exception(image, timeout)
-            return pos
+            if time.clock() - start_time > timeout:
+                RobotException().image_still_found_after_duration_exception(image, timeout)
+        return pos
 
 
     def search_image_multiple(self, image, precision=0.8, debug=False):
@@ -155,7 +151,7 @@ class Image(object):
 
             Raises
             ------
-            Exception
+            RobotException
                 If the image has not been found.
 
             Return
@@ -314,47 +310,47 @@ class Image(object):
 
 
     def search_image_in_area(self, image, x1, y1, x2, y2, precision=0.8, debug=False):
-            ''' Search for the image on the screen.
+        ''' Search for the image on the screen.
 
-                If the image is not found throws an exception.
+            If the image is not found throws an exception.
 
-                Parameters
-                ----------
-                image : str
-                    The path to the image we are looking for.
-                precision : double, optional
-                    The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-                debug : bool, optional
-                    The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
+            Parameters
+            ----------
+            image : str
+                The path to the image we are looking for.
+            precision : double, optional
+                The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
+            debug : bool, optional
+                The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
-                Raises
-                ------
-                Exception
-                    If the image has not been found.
+            Raises
+            ------
+            RobotException
+                If the image has not been found.
 
-                Return
-                ------
-                max_loc : tuple
-                    The location of the image. The top-left corner of the found image.
-            '''
+            Return
+            ------
+            max_loc : tuple
+                The location of the image. The top-left corner of the found image.
+        '''
 
-            current_screen = pyautogui.screenshot(region=(x1, y1, x2, y2))
+        current_screen = pyautogui.screenshot(region=(x1, y1, x2, y2))
 
-            if debug:
-                current_screen.save('debug_screen.png')
+        if debug:
+            current_screen.save('debug_screen.png')
 
-            img_rgb = np.array(current_screen)
-            img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+        img_rgb = np.array(current_screen)
+        img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
 
-            template, w, h = self.__set_image_up(image)
+        template, w, h = self.__set_image_up(image)
 
-            res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-            min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
 
-            if max_val < precision:
-                return [-1, -1]
+        if max_val < precision:
+            return [-1, -1]
 
-            return max_loc
+        return max_loc
 
 
     def highlight_image_in_area(self, image, x1, y1, x2, y2, precision=0.8, color=(0, 0, 255), width=2, name=None, debug=False):
@@ -434,6 +430,13 @@ class Image(object):
         '''
 
         self.screenshot_name = prefix
+
+
+    def reset_screenshot_prefix(self):
+        ''' Set the original prefix for the screenshot name instead of what has been chosen with the << set_screenshot_prefix >> function.
+        '''
+
+        self.screenshot_name = ORIGINAL_SCREENSHOT_PREFIX
 
 
     # ==================================================================================================================
