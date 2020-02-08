@@ -8,7 +8,7 @@ setup(
     name                    = "ImageRobot",
     version                 = ImageRobot.__version__,
     packages                = find_packages(),
-    url                     = "https://github.com/Atyors/ImageRobot"
+    url                     = "https://github.com/Atyors/ImageRobot",
     author                  = "Rouyan Thi",
     author_email            = "rouyanthi@gmail.com",
     description             = "A library used to do image recognition.",
