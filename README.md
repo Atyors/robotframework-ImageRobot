@@ -2,7 +2,7 @@ ImageSearchLibrary is a library dedicated to GUI management.
 ========================================================
 
 The purpose of this module is to bring to Robot Framework user a way to do image recognition.
-This module has been created in 4 different parts :
+This module has been created in 4 different parts:
 - Image recognition
 - Window focus
 - Mouse control
@@ -12,6 +12,8 @@ It can be installed using pip once the folder has been downloaded:
     python -m pip install ImageRobot
 
 With this module you will be able to do the basics of image recognition using Robot Framework.
+
+The functions for the mouse control and the keyboard input are mostly wrapers from other libraries.
 
 
 Image recognition
@@ -43,6 +45,7 @@ This function will save the image on the disk. If too many screenshots already e
 an error telling to clean the repository. It happens when there is 999 screenshots in the repository
 from where the robot is launched.
 
+
 Window focus
 ========================================================
 
@@ -71,3 +74,12 @@ If you use the click image without giving a timestamp, you will not see the curs
 
 Keyboard input
 ========================================================
+
+The Keyboard class gives you some functions dedicated to keyboard control.
+The classic functions are available like the "Input Text" function. It does not need any locator to be used.
+There is also a function named "Execute Hotkey" which gives the user a tool to use hotkeys.
+Example :
+
+    ImageRobot.Execute Hotkey | ctrl+shift+escape
+
+This line will open the task manager.
