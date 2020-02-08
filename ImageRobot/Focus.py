@@ -1,17 +1,13 @@
-import pygetwindow as gw
-import re
+from ImageRobot.RobotException import RobotException
 
+import pygetwindow as gw
 
 class Focus(object):
     ''' This class has been made to implement window management in order to facilitate
         image recognition or switch windows if necessary.
     '''
 
-
-    def __init__(self):
-        ''' Set the initial values once the class is called.
-        '''
-        self.handle = None
+    handle = None
 
 
     def focus_window_containing(self, name):
@@ -24,21 +20,18 @@ class Focus(object):
             
             Raises
             ------
-            Exception
+            RobotException
                 If not any window containing the name or part of the name given has been found.
         '''
-
-        found = False
 
         for title in gw.getAllTitles():
             if name in title:
                 self.handle = gw.getWindowsWithTitle(title)[0]
                 self.handle.activate()
-                found = True
                 break
 
-        if not found:
-            raise Exception("Window containing name \"" + str(name) + "\" has not been found.")
+        if self.handle is None:
+            RobotException().no_window_containing_text_exception(name)
 
 
     def focus_window_with_exact_name(self, name):
@@ -51,21 +44,18 @@ class Focus(object):
             
             Raises
             ------
-            Exception
+            RobotException
                 If not any window with the name given has been found.
         '''
-
-        found = False
 
         for title in gw.getAllTitles():
             if name == title:
                 self.handle = gw.getWindowsWithTitle(title)[0]
                 self.handle.activate()
-                found = True
                 break
 
-        if not found:
-            raise Exception("Window with exact name \"" + str(name) + "\" has not been found.")
+        if self.handle is None:
+            RobotException().no_window_matching_name_exception(name)
 
 
     def maximize_window(self):
@@ -73,14 +63,14 @@ class Focus(object):
 
             Raises
             ------
-            Exception
+            RobotException
                 If not any window has been focused earlier.
         '''
 
         try:
             self.handle.maximize()
         except AttributeError:
-            raise Exception("No handle has been focused yet. Use one of the focus functionality first.")
+            RobotException().no_window_focused_exception()
 
     
     def minimize_window(self):
@@ -88,26 +78,33 @@ class Focus(object):
 
             Raises
             ------
-            Exception
+            RobotException
                 If not any window has been focused earlier.
         '''
 
         try:
             self.handle.minimize()
         except AttributeError:
-            raise Exception("No handle has been focused yet. Use one of the focus functionality first.")
+            RobotException().no_window_focused_exception()
 
-    
+
     def restore_window(self):
         ''' Restore the window focused.
 
             Raises
             ------
-            Exception
+            RobotException
                 If not any window has been focused earlier.
         '''
 
         try:
             self.handle.restore()
         except AttributeError:
-            raise Exception("No handle has been focused yet. Use one of the focus functionality first.")
+            RobotException().no_window_focused_exception()
+
+
+    def remove_focus(self):
+        ''' Remove the current focus.
+        '''
+        
+        self.handle = None
