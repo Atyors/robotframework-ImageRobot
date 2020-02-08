@@ -11,9 +11,9 @@ class Keyboard(object):
 
             Parameters
             ----------
-            text : str
+            text: str
                 The text to type.
-            interval : double, optional
+            interval: double, optional
                 The duration between two characters. Value is in second. Default is << 0 >>.
         '''
 
@@ -25,7 +25,7 @@ class Keyboard(object):
 
             Parameters
             ----------
-            key : str
+            key: str
                 The key code to press and release.
         '''
 
@@ -39,7 +39,7 @@ class Keyboard(object):
 
             Parameters
             ----------
-            key : str
+            key: str
                 The key code to maintain pressed.
         '''
 
@@ -51,7 +51,7 @@ class Keyboard(object):
 
             Parameters
             ----------
-            key : str
+            key: str
                 The key code to release.
         '''
 
@@ -66,7 +66,7 @@ class Keyboard(object):
 
             Parameters
             ----------
-            hotkey : str
+            hotkey: str
                 A string representing a hotkey. Example: << ctrl+shit+esc >> will do the Control-Shift-Escape hotkey.
         '''
         
