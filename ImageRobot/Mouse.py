@@ -1,9 +1,9 @@
 from ImageRobot.Image import Image
+from ImageRobot.RobotException import RobotException
 
 import cv2
 import pyautogui
 import random
-
 
 class Mouse(object):
     ''' This class has been made to implement mouse control while image recognition.
@@ -16,9 +16,9 @@ class Mouse(object):
 
             Parameters
             ----------
-            x : int, float
+            x: int, float
                 The x position on the screen.
-            y : int, float
+            y: int, float
                 The y position on the screen.
             action: str, optional
                 The action to do on the image if it is found. By default is a << left >> click action.
@@ -27,7 +27,7 @@ class Mouse(object):
 
             Raises
             ------
-            Exception
+            ValueError
                 If one of the values is not a convertible number.
         '''
 
@@ -42,9 +42,9 @@ class Mouse(object):
 
             Parameters
             ----------
-            x : int, float
+            x: int, float
                 The x position on the screen.
-            y : int, float
+            y: int, float
                 The y position on the screen.
             timestamp: double, optional
                 The time the movement takes to move from the current position to the found position. Default is << 0.2 >> seconds.
@@ -53,15 +53,15 @@ class Mouse(object):
 
             Raises
             ------
-            Exception
+            ValueError
                 If one of the values is not a convertible number.
         '''
 
         try:
             x = float(x)
             y = float(y)
-        except ValueError:
-            raise Exception("Values \"" + str(x) + "\" and \"" + str(y) + "\" should be number types.")
+        except ValueError as value_e:
+            raise value_e
 
         pyautogui.moveTo(x + random.uniform(0, offset), y + random.uniform(0, offset), timestamp)
 
@@ -73,11 +73,11 @@ class Mouse(object):
 
             Parameters
             ----------
-            image : str
+            image: str
                 The path to the image we are looking for.
-            precision : double, optional
+            precision: double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            timeout : int, optional
+            timeout: int, optional
                 The duration elapsed before raising an error. Value is in second. Default is << 10 >> seconds.
             action: str, optional
                 The action to do on the image if it is found. By default is a << left >> click action.
@@ -88,7 +88,7 @@ class Mouse(object):
 
             Raises
             ------
-            Exception
+            RobotException
                 If the image has not been found after the duration set in the timeout parameter is elapsed.
                 The exception is raised by the function << wait_until_image_appear >>.
         '''
@@ -104,11 +104,11 @@ class Mouse(object):
 
             Parameters
             ----------
-            image : str
+            image: str
                 The path to the image we are looking for.
-            precision : double, optional
+            precision: double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            timeout : int, optional
+            timeout: int, optional
                 The duration elapsed before raising an error. Value is in second. Default is << 10 >> seconds.
             timestamp: double, optional
                 The time the movement takes to move from the current position to the found position.
@@ -117,7 +117,7 @@ class Mouse(object):
 
             Raises
             ------
-            Exception
+            RobotException
                 If the image has not been found after the duration set in the timeout parameter is elapsed.
                 The exception is raised by the function << wait_until_image_appear >>.
                 If the offset is too high and may cause the cursor to be out of the image.
@@ -130,7 +130,7 @@ class Mouse(object):
         if maximum_offset > height / 2 :
             maximum_offset = height / 2
         if offset > maximum_offset:
-            raise Exception("Offset is too high. It may cause the cursor be out of the image targeted. Maximum allowed is " + str(maximum_offset) + ".")
+            RobotException().offset_too_high_exception(offset, maximum_offset)
 
         pos = Image().wait_until_image_appear(image, precision)
 
@@ -144,9 +144,9 @@ class Mouse(object):
 
             Parameters
             ----------
-            x : int, float, optional
+            x: int, float, optional
                 The x position on the screen. If << None >>, set the current x position. Default is << None >>.
-            y : int, float, optional
+            y: int, float, optional
                 The y position on the screen. If << None >>, set the current y position. Default is << None >>.
             action: str, optional
                 The action to do on the image if it is found. By default is a << left >> click action.
@@ -155,7 +155,7 @@ class Mouse(object):
 
             Raises
             ------
-            Exception
+            ValueError
                 If one of the values is not a convertible number.
         '''
 
@@ -168,15 +168,25 @@ class Mouse(object):
         try:
             x = float(x)
             y = float(y)
-        except ValueError:
-            raise Exception("Values \"" + str(x) + "\" and \"" + str(y) + "\" should be number types.")
+        except ValueError as value_e:
+            raise value_e
 
         pyautogui.mouseDown(x, y, button=action, duration=duration)
         self.pressed_button = action
 
 
-    def release_click(self):
-        ''' Release the cursor.
+    def release_click(self, action=None):
+        ''' Release the click action pressed.
+
+            If the action field is << None >>, it releases the last action pressed.
+
+            Parameters
+            ----------
+            action: str, optional
+                The action to release.
         '''
 
-        pyautogui.mouseUp(button=self.pressed_button)
+        if action = None:
+            pyautogui.mouseUp(button=self.pressed_button)
+        else:
+            pyautogui.mouseUp(button=action)
