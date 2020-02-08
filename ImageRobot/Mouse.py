@@ -186,7 +186,7 @@ class Mouse(object):
                 The action to release.
         '''
 
-        if action = None:
+        if action == None:
             pyautogui.mouseUp(button=self.pressed_button)
         else:
             pyautogui.mouseUp(button=action)
