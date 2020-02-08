@@ -1,7 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 import ImageRobot
+
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
 
 setup(
     name                    = "ImageRobot",
@@ -19,4 +20,5 @@ setup(
                                 "Operating System :: OS Independent",
                                 "Programming Language :: Python :: 3.7",
                             ],
+    install_requires        = requirements,
 )
