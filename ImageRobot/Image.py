@@ -22,11 +22,11 @@ class Image(object):
 
             Parameters
             ----------
-            image : str
+            image: str
                 The path to the image we are looking for.
-            precision : double, optional
+            precision: double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            debug : bool, optional
+            debug: bool, optional
                 The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
             Raises
@@ -36,7 +36,7 @@ class Image(object):
 
             Return
             ------
-            max_loc : tuple
+            max_loc: tuple
                 The location of the image. The top-left corner of the found image.
         '''
 
@@ -66,11 +66,11 @@ class Image(object):
 
             Parameters
             ----------
-            image : str
+            image: str
                 The path to the image we are looking for.
-            precision : double, optional
+            precision: double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            timeout : int, optional
+            timeout: int, optional
                 The duration elapsed before raising an error. Value is in second. Default is << 10 >> seconds.
             timesample: double, optional
                 The duration elapsed between two checks of the image. Value is in second. Default is << 0.1 >> second.
@@ -82,7 +82,7 @@ class Image(object):
 
             Return
             ------
-            pos : tuple
+            pos: tuple
                 The location of the image. The top-left corner of the found image.
         '''
 
@@ -105,11 +105,11 @@ class Image(object):
 
             Parameters
             ----------
-            image : str
+            image: str
                 The path to the image we are waiting to disappear.
-            precision : double, optional
+            precision: double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            timeout : int, optional
+            timeout: int, optional
                 The duration elapsed before raising an error. Value is in second. Default is << 10 >> seconds.
             timesample: double, optional
                 The duration elapsed between two checks of the image. Value is in second. Default is << 0.1 >> second.
@@ -121,7 +121,7 @@ class Image(object):
 
             Return
             ------
-            pos : tuple
+            pos: tuple
                 The location of the image. The top-left corner of the found image.
         '''
 
@@ -142,11 +142,11 @@ class Image(object):
 
             Parameters
             ----------
-            image : str
+            image: str
                 The path to the image we are looking for.
-            precision : double, optional
+            precision: double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            debug : bool, optional
+            debug: bool, optional
                 The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
             Raises
@@ -156,7 +156,7 @@ class Image(object):
 
             Return
             ------
-            positions : list of tuples
+            positions: list of tuples
                 Each tuple in the list is the middle of a found image similar to the one chosen.
         '''
 
@@ -185,11 +185,11 @@ class Image(object):
 
             Parameters
             ----------
-            image : str
+            image: str
                 The path to the image we are looking for.
-            precision : double, optional
+            precision: double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            debug : bool, optional
+            debug: bool, optional
                 The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
             Raises
@@ -199,7 +199,7 @@ class Image(object):
 
             Return
             ------
-            count : int
+            count: int
                 The number of times the image has been found on the screen. 
         '''
 
@@ -232,17 +232,17 @@ class Image(object):
 
             Parameters
             ----------
-            image : str
+            image: str
                 The path to the image we are looking for.
-            precision : double, optional
+            precision: double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            color : bgr, optional
-                The color in BGR-format meaning colors are given as following : blue, green and red. Default is << (0, 0, 255) >> which is red color.
-            width : int, optional
+            color: bgr, optional
+                The color in BGR-format meaning colors are given as following: blue, green and red. Default is << (0, 0, 255) >> which is red color.
+            width: int, optional
                 The width of the square borders. Value is in pixel. Default is << 2 >> pixel.
-            name : str, optional
+            name: str, optional
                 The name of the picture if given. Otherwise the name will be such as << imagerobot-screenshot-XXX.png >>. Default is << None >>.
-            debug : bool, optional
+            debug: bool, optional
                 The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
             Raises
@@ -316,11 +316,11 @@ class Image(object):
 
             Parameters
             ----------
-            image : str
+            image: str
                 The path to the image we are looking for.
-            precision : double, optional
+            precision: double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            debug : bool, optional
+            debug: bool, optional
                 The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
             Raises
@@ -330,7 +330,7 @@ class Image(object):
 
             Return
             ------
-            max_loc : tuple
+            max_loc: tuple
                 The location of the image. The top-left corner of the found image.
         '''
 
@@ -362,25 +362,25 @@ class Image(object):
 
             Parameters
             ----------
-            image : str
+            image: str
                 The path to the image we are looking for.
-            x1 : double
+            x1: double
                 The x coordinate of the top-left corner of the screenshot to take. 
-            y1 : double
+            y1: double
                 The y coordinate of the top-left corner of the screenshot to take. 
-            x2 : double
+            x2: double
                 The width of the screenshot to take.
-            y2 : double
+            y2: double
                 The height of the screenshot to take.
-            precision : double, optional
+            precision: double, optional
                 The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            color : bgr, optional
-                The color in BGR-format meaning colors are given as following : blue, green and red. Default is << (0, 0, 255) >> which is red color.
-            width : int, optional
+            color: bgr, optional
+                The color in BGR-format meaning colors are given as following: blue, green and red. Default is << (0, 0, 255) >> which is red color.
+            width: int, optional
                 The width of the square borders. Value is in pixel. Default is << 2 >> pixel.
-            name : str, optional
+            name: str, optional
                 The name of the picture if given. Otherwise the name will be such as << imagerobot-screenshot-XXX.png >>. Default is << None >>.
-            debug : bool, optional
+            debug: bool, optional
                 The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
             Raises
@@ -425,7 +425,7 @@ class Image(object):
 
             Parameters
             ----------
-            prefix : str
+            prefix: str
                 The new prefix for the screenshot names.
         '''
 
@@ -450,7 +450,7 @@ class Image(object):
 
             Parameters
             ----------
-            image : str
+            image: str
                 The path to the image we are looking for.
 
             Raises
@@ -460,11 +460,11 @@ class Image(object):
 
             Return
             ------
-            template : ndarray
+            template: ndarray
                 The template of the image.
-            w : int
+            w: int
                 The width of the image.
-            h : height
+            h: height
                 The height of the image.
         '''
 
@@ -482,9 +482,9 @@ class Image(object):
 
             Parameters
             ----------
-            current_screen : PIL.Image.Image
+            current_screen: PIL.Image.Image
                 The taken picture on which the search will be made.
-            debug : bool
+            debug: bool
                 The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
 
             Raises
@@ -494,7 +494,7 @@ class Image(object):
 
             Return
             ------
-            output_image : ndarray
+            output_image: ndarray
                 The image as a numpy array.
         '''
         try:
@@ -513,7 +513,7 @@ class Image(object):
 
             Parameters
             ----------
-            name : str
+            name: str
                 The name of the picture if given. Otherwise the name will be such as << imagerobot-screenshot-XXX.png >>.
 
             Raises
@@ -525,7 +525,7 @@ class Image(object):
 
             Return
             ------
-            output_name : str
+            output_name: str
                 The future name of the screenshot if the image is found.
         '''
 
