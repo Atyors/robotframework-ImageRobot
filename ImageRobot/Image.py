@@ -14,8 +14,10 @@ class Image(object):
 
     screenshot_name = ORIGINAL_SCREENSHOT_PREFIX
 
+    region = None
 
-    def search_image(self, image, precision=0.8, debug=False):
+
+    def search_image(self, image, precision=0.8, center=False, debug=False):
         ''' Search for the image on the screen.
 
             If the image is not found throws an exception.
@@ -40,7 +42,10 @@ class Image(object):
                 The location of the image. The top-left corner of the found image.
         '''
 
-        current_screen = pyautogui.screenshot()
+        if self.region is None:
+            current_screen = pyautogui.screenshot()
+        else:
+            current_screen = pyautogui.screenshot(region=self.region)
 
         if debug:
             current_screen.save('debug_screen.png')
@@ -56,7 +61,10 @@ class Image(object):
         if max_val < precision:
             return [-1, -1]
 
-        return max_loc
+        if center:
+            return (max_loc[0] + w / 2, max_loc[1] + h / 2)
+        else:
+            return max_loc
 
 
     def wait_until_image_appear(self, image, precision=0.8, timeout=10, timesample=0.1):
@@ -160,7 +168,10 @@ class Image(object):
                 Each tuple in the list is the middle of a found image similar to the one chosen.
         '''
 
-        current_screen = pyautogui.screenshot()
+        if self.region is None:
+            current_screen = pyautogui.screenshot()
+        else:
+            current_screen = pyautogui.screenshot(region=self.region)
 
         if debug:
             current_screen.save('debug_screen.png')
@@ -203,7 +214,10 @@ class Image(object):
                 The number of times the image has been found on the screen. 
         '''
 
-        current_screen = pyautogui.screenshot()
+        if self.region is None:
+            current_screen = pyautogui.screenshot()
+        else:
+            current_screen = pyautogui.screenshot(region=self.region)
 
         if debug:
             current_screen.save('debug_screen.png')
@@ -257,7 +271,10 @@ class Image(object):
             A screenshot named << imagerobot-screenshot-XXX.png >> (or with the given name) is created with squares arround the image searched.
         '''
 
-        current_screen = pyautogui.screenshot()
+        if self.region is None:
+            current_screen = pyautogui.screenshot()
+        else:
+            current_screen = pyautogui.screenshot(region=self.region)
 
         output_image = self.__prepare_output_image(current_screen, debug)
 
@@ -309,115 +326,37 @@ class Image(object):
         # return (pos[0] + image_region_pos[0], pos[1] + image_region_pos[1])
 
 
-    def search_image_in_area(self, image, x1, y1, x2, y2, precision=0.8, debug=False):
-        ''' Search for the image on the screen.
-
-            If the image is not found throws an exception.
+    def set_region(self, x1, y1, x2, y2):
+        ''' Set a specific region on screen where to search any image.
 
             Parameters
             ----------
-            image: str
-                The path to the image we are looking for.
-            precision: double, optional
-                The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            debug: bool, optional
-                The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
-
-            Raises
-            ------
-            RobotException
-                If the image has not been found.
-
-            Return
-            ------
-            max_loc: tuple
-                The location of the image. The top-left corner of the found image.
-        '''
-
-        current_screen = pyautogui.screenshot(region=(x1, y1, x2, y2))
-
-        if debug:
-            current_screen.save('debug_screen.png')
-
-        img_rgb = np.array(current_screen)
-        img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-
-        template, w, h = self.__set_image_up(image)
-
-        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-
-        if max_val < precision:
-            return [-1, -1]
-
-        return max_loc
-
-
-    def highlight_image_in_area(self, image, x1, y1, x2, y2, precision=0.8, color=(0, 0, 255), width=2, name=None, debug=False):
-        ''' Highlight the searched image in the given area of the screen.
-
-            If the image is found multiple times, it will draw a rectangle arround each.
-
-            Take a screenshot as << debug_screen.png >> then read it with cv2 to keep the good colors.
-
-            Parameters
-            ----------
-            image: str
-                The path to the image we are looking for.
-            x1: double
+            x1: int, float
                 The x coordinate of the top-left corner of the screenshot to take. 
-            y1: double
+            y1: int, float
                 The y coordinate of the top-left corner of the screenshot to take. 
-            x2: double
-                The width of the screenshot to take.
-            y2: double
-                The height of the screenshot to take.
-            precision: double, optional
-                The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
-            color: bgr, optional
-                The color in BGR-format meaning colors are given as following: blue, green and red. Default is << (0, 0, 255) >> which is red color.
-            width: int, optional
-                The width of the square borders. Value is in pixel. Default is << 2 >> pixel.
-            name: str, optional
-                The name of the picture if given. Otherwise the name will be such as << imagerobot-screenshot-XXX.png >>. Default is << None >>.
-            debug: bool, optional
-                The activation of the debug mode. If << True >> takes a screenshot of the screen. Default is << False >>.
-
-            Raises
-            ------
-            RobotException
-                Throw an error if the user launching the function cannot write on disk.
-                Throw an error if the user already has 999 sreenshots in the repository.
-                Throw an error if the user set a name in a wrong format without finishing by << .png >> nor << .jpg >>.
-
-            Output
-            ------
-            A screenshot named << imagerobot-screenshot-XXX.png >> (or with the given name) is created with squares arround the image searched.
+            x2: int, float
+                The x coordinate of the bottom-right corner of the screenshot to take. 
+            y2: int, float
+                The y coordinate of the bottom-right corner of the screenshot to take. 
         '''
-
-        current_screen = pyautogui.screenshot(region=(x1, y1, x2, y2))
-
-        output_image = self.__prepare_output_image(current_screen, debug)
-
-        output_name = self.__check_output_name(name)
-
-        img_rgb = np.array(current_screen)
-        img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
-
-        template, w, h = self.__set_image_up(image)
-
-        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
-        loc = np.where(res >= precision)
-
-        for pt in zip(*loc[::-1]):
-            cv2.rectangle(output_image, pt, (pt[0] + w, pt[1] + h), color, width)
 
         try:
-            type(pt)
-        except UnboundLocalError:
-            RobotException().image_not_found_exception(image)
+            x1 = float(x1)
+            y1 = float(y1)
+            x2 = float(x2)
+            y2 = float(y2)
+        except ValueError as value_e:
+            raise value_e
 
-        cv2.imwrite(output_name, output_image)
+        self.region = (x1, y1, x2 - x1, y2 - y1)
+
+
+    def release_region(self):
+        ''' Release the grabbed region.
+        '''
+
+        self.region = None
 
 
     def set_screenshot_prefix(self, prefix):
