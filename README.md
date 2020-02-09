@@ -40,7 +40,7 @@ where the image has been found.
 If the image may appear because the loading takes time, you can use the "wait_until_image_appear" function which will 
 wait a certain amount of time before going in timeout. Example:
 
-    ${img}= | Set Variable | .${/}google.png
+    ${img}= | BuiltIn.Set Variable | .${/}google.png
     ${pos}= | ImageRobot.Wait Until Image Appear | ${img} | timeout=30
 
 If the image has not been found in the next 30 seconds, the Robot will show a failure message telling
