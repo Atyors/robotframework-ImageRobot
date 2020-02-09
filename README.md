@@ -31,8 +31,8 @@ Image recognition
 
 Image recognition example in Robot Framework:
 
-    ${img}= | BuiltIn.Set Variable | .${/}google.png
-    ${pos}= | ImageRobot.Search Image | ${img}
+    ${img}=  BuiltIn.Set Variable  .${/}google.png
+    ${pos}=  ImageRobot.Search Image  ${img}
 
 In this example, your Robot will look for the image at the path "./google.png" and return the position on the screen
 where the image has been found.
@@ -40,8 +40,8 @@ where the image has been found.
 If the image may appear because the loading takes time, you can use the "wait_until_image_appear" function which will 
 wait a certain amount of time before going in timeout. Example:
 
-    ${img}= | BuiltIn.Set Variable | .${/}google.png
-    ${pos}= | ImageRobot.Wait Until Image Appear | ${img} | timeout=30
+    ${img}=  BuiltIn.Set Variable  .${/}google.png
+    ${pos}=  ImageRobot.Wait Until Image Appear  ${img}  timeout=30
 
 If the image has not been found in the next 30 seconds, the Robot will show a failure message telling
 that it did not happen. Otherwise the "pos" variable will get the position of the image found.
@@ -49,7 +49,7 @@ that it did not happen. Otherwise the "pos" variable will get the position of th
 You can highlight the image you are looking for with the "highlight image" function. If the image
 is found multiple times, it will draw a rectangle arround each.
 
-    ImageRobot.Highlight Image | ${img}
+    ImageRobot.Highlight Image  ${img}
 
 This function will save the image on the disk. If too many screenshots already exist, it will throw
 an error telling to clean the repository. It happens when there is 999 screenshots in the repository
@@ -59,8 +59,8 @@ If you need to find an image in a specific region, in order to optimize performa
 "set region" function. The screenshot will be taken for only the part until it has been released with
 "release region".
 
-    ImageRobot.Set Region | 0 | 0 | 500 | 500
-    ImageRobot.Highlight Image | ${img}
+    ImageRobot.Set Region  0  0  500  500
+    ImageRobot.Highlight Image  ${img}
     ImageRobot.Release Region
 
 This sequence will try to find and highlight the image in the upper-left region of the screen. Then it releases the region
@@ -74,7 +74,7 @@ The Focus class gives you a tool to select specific windows and do action on it.
 Once the window has been set in focus, it is possible to put it foreground, minimize, maximize and restore it.
 Example:
 
-    ImageRobot.Focus Window Containing | Firefox
+    ImageRobot.Focus Window Containing  Firefox
     ImageRobot.Restore Window
     ImageRobot.Maximize Window
 
@@ -95,9 +95,9 @@ If you use the click image without giving a timestamp, you will not see the curs
 Even if the "Set Region" function has been used, the mouse will not use it. So it is preferable to use a sequence of
 actions like the example above:
 
-    ImageRobot.Set Region | 0 | 0 | 960 | 1080
-    ${pos}= | ImageRobot.Search Image | ${img} | center=True
-    BuiltIn.Run Keyword If | ${pos}[0] != -1 | ImageRobot.Click Position | ${pos}[0] | ${pos}[1]
+    ImageRobot.Set Region  0  0  960  1080
+    ${pos}=  ImageRobot.Search Image  ${img}  center=True
+    BuiltIn.Run Keyword If  ${pos}[0] != -1  ImageRobot.Click Position  ${pos}[0]  ${pos}[1]
     ImageRobot.Release Region
 
 With the "Set Region" we cut the left half part of a screen width 1920 * 1080. We search in this cut part.
@@ -113,6 +113,6 @@ The classic functions are available like the "Input Text" function. It does not 
 There is also a function named "Execute Hotkey" which gives the user a tool to use hotkeys.
 Example :
 
-    ImageRobot.Execute Hotkey | ctrl+shift+escape
+    ImageRobot.Execute Hotkey  ctrl+shift+escape
 
 This line will open the task manager.
