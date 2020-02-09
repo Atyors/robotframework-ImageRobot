@@ -1,4 +1,4 @@
-ImageSearchLibrary is a library dedicated to GUI management.
+ImageRobot is a library dedicated to GUI management.
 ========================================================
 
 The purpose of this module is to bring to Robot Framework user a way to do image recognition.
