@@ -132,7 +132,7 @@ class Mouse(object):
         if offset > maximum_offset:
             RobotException().offset_too_high_exception(offset, maximum_offset)
 
-        pos = Image().wait_until_image_appear(image, precision)
+        pos = Image().wait_until_image_appear(image, precision, timeout)
 
         pyautogui.moveTo(pos[0] + width / 2 + random.uniform(0, offset), pos[1] + height / 2 + random.uniform(0, offset), timestamp)
 
