@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import ImageRobot
 
-with open('requirements.txt') as f:
+with open("requirements.txt") as f:
     requirements = f.read().splitlines()
 
 setup(
