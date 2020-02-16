@@ -1,12 +1,26 @@
-RobotFramework-ImageRobot
-=========================
+# RobotFramework-ImageRobot
 
-.. contents::
-   :local:
-   
+- [Updates](#updates)
+- [Introduction](#introduction)
+- [Requirements](#requirements)
+- [Image recognition](#image-recognition)
+- [Installation](#installation)
+- [Window focus](#window-focus)
+- [Mouse control](#mouse-control)
+- [Keyboard input](#keyboard-input)
 
-Introduction
-------------
+
+## Updates
+
+- Fix "setup.py" for installation not properly working
+- Fix timestamp usage for "click_image" function
+- Fix timeout usage for "click_image" function
+- Add "center" parameter in "search_image" function
+- Add "set_region" function
+- Add "release_region" function
+
+
+## Introduction
 
 The purpose of this module is to bring to Robot Framework user a way to do image recognition.
 This module has been created in 4 different parts:
@@ -20,8 +34,7 @@ With this module you will be able to do the basics of image recognition using Ro
 The functions for the mouse control and the keyboard input are mostly wrapers from other libraries.
 
 
-Requirements
-------------
+## Requirements
 
 Python version: 3.6+
 
@@ -34,26 +47,13 @@ Modules required:
 - robotframework
 
 
-Installation
-------------
+## Installation
 
 It can simply be installed using pip once the project has been cloned or downloaded:
     python -m pip install ImageRobot
 
 
-Update
-------
-
-- Fix "setup.py" for installation not properly working
-- Fix timestamp usage for "click_image" function
-- Fix timeout usage for "click_image" function
-- Add "center" parameter in "search_image" function
-- Add "set_region" function
-- Add "release_region" function
-
-
-Image recognition
------------------
+## Image recognition
 
 Image recognition example in Robot Framework:
 
@@ -93,8 +93,7 @@ This sequence will try to find and highlight the image in the upper-left region 
 so next searchs will be done on the whole screen.
 
 
-Window focus
-------------
+## Window focus
 
 The Focus class gives you a tool to select specific windows and do action on it.
 Once the window has been set in focus, it is possible to put it foreground, minimize, maximize and restore it.
@@ -109,8 +108,7 @@ Then we restore the window. It means that if the window has been reduced in the 
 Finaly the Robot maximize the window making it full screen as if you clicked the maximize button.
 
 
-Mouse control
--------------
+## Mouse control
 
 The Mouse class gives you some functions dedicated to mouse control.
 You can find the classics "Click Position" - to click at specific coordinates -, "Click Image" - to click on an image
@@ -131,8 +129,7 @@ If the value returned is different than "-1", it means the image has been found 
 Finally we release the region set.
 
 
-Keyboard input
---------------
+## Keyboard input
 
 The Keyboard class gives you some functions dedicated to keyboard control.
 The classic functions are available like the "Input Text" function. It does not need any locator to be used.
