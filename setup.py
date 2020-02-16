@@ -1,12 +1,16 @@
 from setuptools import setup, find_packages
-import ImageRobot
+
 
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()
 
+with open("ImageRobot/version.py") as version_file:
+    VERSION = version_file.read().strip().split('"')[1]
+
+
 setup(
     name                    = "ImageRobot",
-    version                 = ImageRobot.__version__,
+    version                 = VERSION,
     packages                = find_packages(),
     url                     = "https://github.com/Atyors/ImageRobot",
     author                  = "Rouyan Thi",

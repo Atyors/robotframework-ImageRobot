@@ -1,5 +1,12 @@
-ImageRobot is a library dedicated to GUI management.
-========================================================
+RobotFramework-ImageRobot
+=========================
+
+.. contents::
+   :local:
+   
+
+Introduction
+------------
 
 The purpose of this module is to bring to Robot Framework user a way to do image recognition.
 This module has been created in 4 different parts:
@@ -8,28 +15,45 @@ This module has been created in 4 different parts:
 - Mouse control
 - Keyboard input
 
-It can be installed using pip once the folder has been downloaded:
-    python -m pip install ImageRobot
-
 With this module you will be able to do the basics of image recognition using Robot Framework.
 
 The functions for the mouse control and the keyboard input are mostly wrapers from other libraries.
 
 
-Update
-========================================================
+Requirements
+------------
 
+Python version: 3.6+
+
+Modules required:
+- keyboard
+- numpy
+- opencv-python
+- pyautogui
+- pygetwindow
+- robotframework
+
+
+Installation
+------------
+
+It can simply be installed using pip once the project has been cloned or downloaded:
+    python -m pip install ImageRobot
+
+
+Update
+------
+
+- Fix "setup.py" for installation not properly working
 - Fix timestamp usage for "click_image" function
 - Fix timeout usage for "click_image" function
 - Add "center" parameter in "search_image" function
 - Add "set_region" function
 - Add "release_region" function
-- Remove "search_image_in_area" function
-- Remove "highlight_image_in_area" function
 
 
 Image recognition
-========================================================
+-----------------
 
 Image recognition example in Robot Framework:
 
@@ -70,7 +94,7 @@ so next searchs will be done on the whole screen.
 
 
 Window focus
-========================================================
+------------
 
 The Focus class gives you a tool to select specific windows and do action on it.
 Once the window has been set in focus, it is possible to put it foreground, minimize, maximize and restore it.
@@ -86,7 +110,7 @@ Finaly the Robot maximize the window making it full screen as if you clicked the
 
 
 Mouse control
-========================================================
+-------------
 
 The Mouse class gives you some functions dedicated to mouse control.
 You can find the classics "Click Position" - to click at specific coordinates -, "Click Image" - to click on an image
@@ -108,7 +132,7 @@ Finally we release the region set.
 
 
 Keyboard input
-========================================================
+--------------
 
 The Keyboard class gives you some functions dedicated to keyboard control.
 The classic functions are available like the "Input Text" function. It does not need any locator to be used.
