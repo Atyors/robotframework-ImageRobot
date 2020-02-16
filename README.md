@@ -50,6 +50,7 @@ Modules required:
 ## Installation
 
 It can simply be installed using pip once the project has been cloned or downloaded:
+    
     python -m pip install ImageRobot
 
 
