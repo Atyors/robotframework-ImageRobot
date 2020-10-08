@@ -12,12 +12,8 @@
 
 ## Updates
 
+- Fix time.clock() removal
 - Fix "setup.py" for installation not properly working
-- Fix timestamp usage for "click_image" function
-- Fix timeout usage for "click_image" function
-- Add "center" parameter in "search_image" function
-- Add "set_region" function
-- Add "release_region" function
 
 
 ## Introduction
