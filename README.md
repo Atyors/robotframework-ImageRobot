@@ -12,6 +12,8 @@
 
 ## Updates
 
+- Add region parameter to set_region_method()
+- Improve location when using set_region() method
 - Fix time.clock() removal
 - Fix "setup.py" for installation not properly working
 

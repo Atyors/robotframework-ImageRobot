@@ -64,6 +64,9 @@ class Image(object):
         if max_val < precision:
             return [-1, -1]
 
+        if self.region is not None:
+            max_loc = (max_loc[0] + self.region[0], max_loc[1] + self.region[1])
+
         if center:
             return max_loc[0] + w / 2, max_loc[1] + h / 2
         else:
@@ -186,7 +189,10 @@ class Image(object):
 
         positions = []
         for pt in zip(*loc[::-1]):  # Swap columns and rows
-            positions += [(pt[0] + w / 2, pt[1] + h / 2)]
+            if self.region is not None:
+                positions += [(self.region[0] + pt[0] + w / 2, self.region[1] + pt[1] + h / 2)]
+            else:
+                positions += [(pt[0] + w / 2, pt[1] + h / 2)]
 
         return positions
 
@@ -324,7 +330,7 @@ class Image(object):
 
         # return (pos[0] + image_region_pos[0], pos[1] + image_region_pos[1])
 
-    def set_region(self, x1, y1, x2, y2):
+    def set_region(self, x1=None, y1=None, x2=None, y2=None, region=None):
         """ Set a specific region on screen where to search any image.
 
             Parameters
@@ -336,8 +342,16 @@ class Image(object):
             x2: int, float
                 The x coordinate of the bottom-right corner of the screenshot to take. 
             y2: int, float
-                The y coordinate of the bottom-right corner of the screenshot to take. 
+                The y coordinate of the bottom-right corner of the screenshot to take.
+            region: tuple, list
+                The region with its 4 coordinates.
         """
+
+        if region is not None:
+            x1 = region[0]
+            y1 = region[1]
+            x2 = region[2]
+            y2 = region[3]
 
         try:
             x1 = float(x1)
