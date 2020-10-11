@@ -20,7 +20,7 @@ setup(
     include_package_data    = True,
     classifiers             = [
                                 "Programming Language :: Python",
-                                "Development Status :: 5 - Stable",
+                                "Development Status :: 5 - Production/Stable",
                                 "Natural Language :: English",
                                 "Operating System :: OS Independent",
                                 "Programming Language :: Python :: 3.7",

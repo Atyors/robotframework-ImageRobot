@@ -10,6 +10,16 @@
 - [Keyboard input](#keyboard-input)
 
 
+## Now available on PyPI
+
+Just use pip to install the package:
+
+
+    python -m pip install ImageRobot
+
+
+You no longer need to copy nor clone the repository to get the package.
+
 ## Updates
 
 - Add region parameter to set_region_method()

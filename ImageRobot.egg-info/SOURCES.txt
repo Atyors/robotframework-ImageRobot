@@ -1,0 +1,15 @@
+MANIFEST.in
+README.md
+setup.py
+ImageRobot/Focus.py
+ImageRobot/Image.py
+ImageRobot/Keyboard.py
+ImageRobot/Mouse.py
+ImageRobot/RobotException.py
+ImageRobot/__init__.py
+ImageRobot/version.py
+ImageRobot.egg-info/PKG-INFO
+ImageRobot.egg-info/SOURCES.txt
+ImageRobot.egg-info/dependency_links.txt
+ImageRobot.egg-info/requires.txt
+ImageRobot.egg-info/top_level.txt

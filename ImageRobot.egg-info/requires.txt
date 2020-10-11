@@ -1,0 +1,6 @@
+keyboard
+numpy
+opencv-python
+pyautogui
+pygetwindow
+robotframework
