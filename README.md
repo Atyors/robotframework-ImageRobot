@@ -22,10 +22,10 @@ You no longer need to copy nor clone the repository to get the package.
 
 ## Updates
 
+- Add "position" parameter to make it easier to click / move the mouse
+- Add new method "set_region_around_position"
 - Add region parameter to set_region_method()
 - Improve location when using set_region() method
-- Fix time.clock() removal
-- Fix "setup.py" for installation not properly working
 
 
 ## Introduction

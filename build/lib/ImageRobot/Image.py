@@ -303,48 +303,51 @@ class Image(object):
 
         cv2.imwrite(output_name, output_image)
 
-    def search_image_in_image(self, specific_image, image_region):
-        """ WIP
-        """
-        img = cv2.imread(image_region)
-        height, width, channels = img.shape
-        image_region_pos = self.search_image(image_region)
-        pos = self.search_image_in_region(specific_image, image_region_pos[0], image_region_pos[1],
-                                          image_region_pos[0] + width, image_region_pos[1] + height)
+    # def search_image_in_image(self, specific_image, image_region):
+    #     """ WIP
+    #     """
+    #     img = cv2.imread(image_region)
+    #     height, width, channels = img.shape
+    #     image_region_pos = self.search_image(image_region)
+    #     pos = self.search_image_in_region(specific_image, image_region_pos[0], image_region_pos[1],
+    #                                       image_region_pos[0] + width, image_region_pos[1] + height)
+    #
+    #     return pos[0] + image_region_pos[0], pos[1] + image_region_pos[1]
+    # img = cv2.imread(image_region)
+    # height, width, channels = img.shape
+    # image_region_pos = self.wait_until_image_appear(image_region, region_precision, region_timeout)
 
-        return pos[0] + image_region_pos[0], pos[1] + image_region_pos[1]
-        # img = cv2.imread(image_region)
-        # height, width, channels = img.shape
-        # image_region_pos = self.wait_until_image_appear(image_region, region_precision, region_timeout)
+    # start_time = time.process_time()
 
-        # start_time = time.process_time()
+    # pos = [-1, -1]
 
-        # pos = [-1, -1]
+    # while pos[0] == -1:
+    #     time.sleep(timesample)
+    #     pos = self.search_image_in_region(specific_image, image_region_pos[0], image_region_pos[1], image_region_pos[0] + width, image_region_pos[1] + height)
 
-        # while pos[0] == -1:
-        #     time.sleep(timesample)
-        #     pos = self.search_image_in_region(specific_image, image_region_pos[0], image_region_pos[1], image_region_pos[0] + width, image_region_pos[1] + height)
+    #     if time.process_time() - start_time > specific_timeout:
+    #         raise Exception("Image \"" + str(image) + "\" still found after " + str(timeout) + " seconds.")
 
-        #     if time.process_time() - start_time > specific_timeout:
-        #         raise Exception("Image \"" + str(image) + "\" still found after " + str(timeout) + " seconds.")
+    # return (pos[0] + image_region_pos[0], pos[1] + image_region_pos[1])
 
-        # return (pos[0] + image_region_pos[0], pos[1] + image_region_pos[1])
-
-    def set_region(self, x1=None, y1=None, x2=None, y2=None, region=None):
+    def set_region(self, x1=None, y1=None, x2=None, y2=None, region=None, debug=False):
         """ Set a specific region on screen where to search any image.
 
             Parameters
             ----------
-            x1: int, float
+            x1: int, float, optional
                 The x coordinate of the top-left corner of the screenshot to take. 
-            y1: int, float
+            y1: int, float, optional
                 The y coordinate of the top-left corner of the screenshot to take. 
-            x2: int, float
+            x2: int, float, optional
                 The x coordinate of the bottom-right corner of the screenshot to take. 
-            y2: int, float
+            y2: int, float, optional
                 The y coordinate of the bottom-right corner of the screenshot to take.
-            region: tuple, list
+            region: tuple, list, optional
                 The region with its 4 coordinates.
+            debug: bool, optional
+                The activation of the debug mode. If << True >> takes a screenshot of the set region.
+                Default is << False >>.
         """
 
         if region is not None:
@@ -362,6 +365,40 @@ class Image(object):
             raise value_e
 
         self.region = (x1, y1, x2 - x1, y2 - y1)
+
+        if debug:
+            current_screen = pyautogui.screenshot(region=self.region)
+            current_screen.save('debug_screen.png')
+
+    def set_region_around_position(self, x=None, y=None, position=None, width=10, height=10, debug=False):
+        """ Set a specific region on screen where to search any image.
+
+            Parameters
+            ----------
+            x: int, float, optional
+                The x coordinate of the middle of the place of the screenshot to take.
+            y: int, float, optional
+                The y coordinate of the middle of the place of the screenshot to take.
+            position: tuple, optional
+                The position x and y as a single tuple.
+            width: int, float, optional
+                The full width of the region to grab.
+            height: int, float, optional
+                The full height of the region to grab.
+            debug: bool, optional
+                The activation of the debug mode. If << True >> takes a screenshot of the set region.
+                Default is << False >>.
+        """
+
+        if position is not None:
+            x = position[0]
+            y = position[1]
+
+        width = width / 2
+        height = height / 2
+
+        self.set_region(x - width, y - height, x + width, y + height, debug=debug)
+        return
 
     def release_region(self):
         """ Release the grabbed region.

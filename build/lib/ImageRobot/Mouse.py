@@ -13,7 +13,7 @@ class Mouse(object):
 
     pressed_button = None
 
-    def click_position(self, x, y, action="left", timestamp=0, offset=0):
+    def click_position(self, x=None, y=None, position=None, action="left", timestamp=0, offset=0):
         """ Simulate click at the given position.
 
             If one of the value is not a number an error is thrown.
@@ -21,9 +21,11 @@ class Mouse(object):
             Parameters
             ----------
             x: int, float
-                The x position on the screen.
+                The x position on the screen. Default is << None >>.
             y: int, float
-                The y position on the screen.
+                The y position on the screen. Default is << None >>.
+            position: tuple
+                The position x and y as a single tuple. Default is << None >>.
             action: str, optional
                 The action to do on the image if it is found. By default is a << left >> click action.
             timestamp: int, float, optional
@@ -37,21 +39,27 @@ class Mouse(object):
                 If one of the values is not a convertible number.
         """
 
+        if position is not None:
+            x = position[0]
+            y = position[1]
+
         self.move_cursor_to_position(x, y, timestamp, offset)
         pyautogui.click(button=action)
 
     @staticmethod
-    def move_cursor_to_position(x, y, timestamp=0.2, offset=0):
+    def move_cursor_to_position(x=None, y=None, position=None, timestamp=0.2, offset=0):
         """ Move the cursor in the middle of the given image.
 
             If one of the value is not a number an error is thrown.
 
             Parameters
             ----------
-            x: int, float
-                The x position on the screen.
-            y: int, float
-                The y position on the screen.
+            x: int, float, optional
+                The x position on the screen. Default is << None >>.
+            y: int, float, optional
+                The y position on the screen. Default is << None >>.
+            position: tuple, optional
+                The position x and y as a single tuple. Default is << None >>.
             timestamp: double, optional
                 The time the movement takes to move from the current position to the found position.
                 Default is << 0.2 >> seconds.
@@ -63,6 +71,10 @@ class Mouse(object):
             ValueError
                 If one of the values is not a convertible number.
         """
+
+        if position is not None:
+            x = position[0]
+            y = position[1]
 
         try:
             x = float(x)
