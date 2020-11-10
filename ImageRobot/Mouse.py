@@ -43,7 +43,7 @@ class Mouse(object):
             x = position[0]
             y = position[1]
 
-        self.move_cursor_to_position(x, y, timestamp, offset)
+        self.move_cursor_to_position(x, y, position, timestamp, offset)
         pyautogui.click(button=action)
 
     @staticmethod
