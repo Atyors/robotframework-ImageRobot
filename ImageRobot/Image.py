@@ -72,7 +72,7 @@ class Image(object):
         else:
             return max_loc
 
-    def wait_until_image_appear(self, image, precision=0.8, timeout=10, timesample=0.1):
+    def wait_until_image_appear(self, image, precision=0.8, timeout=10, timesample=0.1, center=False):
         """ Wait until the given image appears in the screen for a given duration.
 
             If the image is not found, when the timeout is elapsed, an error is thrown.
@@ -87,6 +87,8 @@ class Image(object):
                 The duration elapsed before raising an error. Value is in second. Default is << 10 >> seconds.
             timesample: double, optional
                 The duration elapsed between two checks of the image. Value is in second. Default is << 0.1 >> second.
+            center: bool, optional
+                Try to set the searched image in the center of the view. Default is << False >>.
 
             Raises
             ------
@@ -104,7 +106,7 @@ class Image(object):
 
         while pos[0] == -1:
             time.sleep(timesample)
-            pos = self.search_image(image, precision)
+            pos = self.search_image(image, precision, center=center)
 
             if time.process_time() - start_time > timeout:
                 RobotException().image_not_found_after_duration_exception(image, timeout)
