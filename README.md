@@ -22,6 +22,8 @@ You no longer need to copy nor clone the repository to get the package.
 
 ## Updates
 
+- Add "set_region_around_image" in Image
+- Fix requirements.txt error with pip install
 - Add "position" parameter to make it easier to click / move the mouse
 - Add new method "set_region_around_position"
 - Add region parameter to set_region_method()

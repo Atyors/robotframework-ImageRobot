@@ -13,7 +13,7 @@ class Mouse(object):
 
     pressed_button = None
 
-    def click_position(self, x=None, y=None, position=None, action="left", timestamp=0, offset=0):
+    def click_position(self, x=None, y=None, position=None, action="left", timestamp=0, offset=0, clicks=1):
         """ Simulate click at the given position.
 
             If one of the value is not a number an error is thrown.
@@ -32,6 +32,8 @@ class Mouse(object):
                 The time taken to move the cursor from origin position to clicked position.
             offset: int, float, optional
                 The distance maximum from the targeted point. Default is << 0 >>.
+            clicks: int, optional
+                The number of clicks to do. Default is << 1 >>.
 
             Raises
             ------
@@ -43,8 +45,8 @@ class Mouse(object):
             x = position[0]
             y = position[1]
 
-        self.move_cursor_to_position(x, y, timestamp, offset)
-        pyautogui.click(button=action)
+        self.move_cursor_to_position(x, y, position, timestamp=timestamp, offset=offset)
+        pyautogui.click(button=action, clicks=clicks)
 
     @staticmethod
     def move_cursor_to_position(x=None, y=None, position=None, timestamp=0.2, offset=0):
@@ -84,7 +86,7 @@ class Mouse(object):
 
         pyautogui.moveTo(x + random.uniform(0, offset), y + random.uniform(0, offset), timestamp)
 
-    def click_image(self, image, precision=0.8, timeout=10, action="left", timestamp=0, offset=0):
+    def click_image(self, image, precision=0.8, timeout=10, action="left", timestamp=0, offset=0, clicks=1):
         """ Simulate click in the middle of the given image depending on the offset.
 
             If the image is not found, when the timeout is elapsed, an error is thrown.
@@ -104,6 +106,8 @@ class Mouse(object):
                 Default is << 0 >> second.
             offset: int, float, optional
                 The distance maximum from the targeted point. Default is << 0 >>.
+            clicks: int, optional
+                The number of clicks to do. Default is << 1 >>.
 
             Raises
             ------
@@ -113,7 +117,7 @@ class Mouse(object):
         """
 
         self.move_cursor_to_image(image, precision, timeout, timestamp, offset)
-        pyautogui.click(button=action)
+        pyautogui.click(button=action, clicks=clicks)
 
     @staticmethod
     def move_cursor_to_image(image, precision=0.8, timeout=10, timestamp=0.2, offset=0):

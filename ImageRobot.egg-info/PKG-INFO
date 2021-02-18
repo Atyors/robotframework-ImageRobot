@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: ImageRobot
-Version: 1.3.1
+Version: 1.3.2
 Summary: A library used to do image recognition.
 Home-page: https://github.com/Atyors/ImageRobot
 Author: Rouyan Thi
@@ -30,6 +30,8 @@ Description: # RobotFramework-ImageRobot
         
         ## Updates
         
+        - Add "set_region_around_image" in Image
+        - Fix requirements.txt error with pip install
         - Add "position" parameter to make it easier to click / move the mouse
         - Add new method "set_region_around_position"
         - Add region parameter to set_region_method()

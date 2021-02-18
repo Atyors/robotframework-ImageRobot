@@ -51,7 +51,7 @@ class Image(object):
             current_screen = pyautogui.screenshot(region=self.region)
 
         if debug:
-            current_screen.save('debug_screen.png')
+            current_screen.save("debug_screen.png")
 
         img_rgb = np.array(current_screen)
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
@@ -179,7 +179,7 @@ class Image(object):
             current_screen = pyautogui.screenshot(region=self.region)
 
         if debug:
-            current_screen.save('debug_screen.png')
+            current_screen.save("debug_screen.png")
 
         img_rgb = np.array(current_screen)
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
@@ -227,7 +227,7 @@ class Image(object):
             current_screen = pyautogui.screenshot(region=self.region)
 
         if debug:
-            current_screen.save('debug_screen.png')
+            current_screen.save("debug_screen.png")
 
         img_rgb = np.array(current_screen)
         img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
@@ -401,6 +401,48 @@ class Image(object):
 
         self.set_region(x - width, y - height, x + width, y + height, debug=debug)
         return
+
+    def set_region_around_image(self, image, precision=0.8, padding=0, debug=False):
+        """ Set a specific region on screen where the image given has been found.
+
+            Parameters
+            ----------
+            image: str
+                The path to the image we are looking for.
+            precision: double, optional
+                The percentage of recognition to use. Default is << 0.8 >>, meaning 80% similar.
+            padding: int, optional
+                The padding around the image to get a bigger region than the image size.
+            debug: bool, optional
+                The activation of the debug mode. If << True >> takes a screenshot of the set region.
+                Default is << False >>.
+
+            Return
+            ------
+                The region where the image is.
+        """
+
+        if self.region is not None:
+            return False
+
+        current_screen = pyautogui.screenshot()
+
+        if debug:
+            current_screen.save("debug_screen.png")
+
+        img_rgb = np.array(current_screen)
+        img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+
+        template, w, h = self.__set_image_up(image)
+
+        res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+
+        if max_val < precision:
+            return False
+        region = (max_loc[0] - padding, max_loc[1] - padding, max_loc[0] + w + padding, max_loc[1] + h + padding)
+        self.set_region(region=region, debug=debug)
+        return region
 
     def release_region(self):
         """ Release the grabbed region.
