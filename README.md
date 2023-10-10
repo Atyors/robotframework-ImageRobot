@@ -56,6 +56,7 @@ Modules required:
 - pygetwindow
 - robotframework
 
+As pygetwindow is only usable with Windows, the Focus object cannot be used on other platforms. You can use the project as base for your work if needed.
 
 ## Installation
 
